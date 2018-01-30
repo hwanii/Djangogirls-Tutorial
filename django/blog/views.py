@@ -1,5 +1,6 @@
 from django.http import HttpResponse
 from django.shortcuts import render
+from .models import Post
 
 
 def post_list(request):
@@ -14,7 +15,17 @@ def post_list(request):
     # 7-2. 가져온 내용을 적절히 처리(렌더링, render()함수)하여 리턴
     # 8. 함수의 실행 결과를 브라우저로 다시 전달
 
-    return render(request, 'blog/post_list.html')
+    posts = Post.objects.all()
+    context = {
+        'posts': posts,
+    }
+    return render(
+        request=request,
+        template_name='blog/post_list.html',
+        context=context,
+    )
+    # 위 return 코드와 같음
+    # return render(request, 'blog/post_list.html', context)
 
 def post_detail(request):
     return render(request, 'blog/post_detail.html')

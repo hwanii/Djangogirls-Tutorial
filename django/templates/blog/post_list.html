@@ -8,7 +8,18 @@
     <title>DjangoGirls Tutorial</title>
 </head>
 <body>
-    <h1>Post List</h1>
-    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ab consequatur ea eius eveniet illum non officiis quasi quidem voluptates. Dolor dolores ducimus id, inventore nemo quaerat qui reprehenderit. Dolorum, sequi.</p>
+    <div>
+        <h1><a href="/">Django Girls Blog</a></h1>
+
+    </div>
+    {% for post in posts %}
+    <div>
+        <p>published: {{post.published_date}}</p>
+        <h2><a href="">{{ post.title }}</a></h2>
+        <p>{{ post.content|linebreaksbr }}</p>
+        <!--linebreaksbr : whitespace에서 pre-line과 같은 기능-->
+    </div>
+    {% endfor %}
+
 </body>
 </html>
