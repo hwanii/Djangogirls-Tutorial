@@ -15,3 +15,6 @@ def post_list(request):
     # 8. 함수의 실행 결과를 브라우저로 다시 전달
 
     return render(request, 'blog/post_list.html')
+
+def post_detail(request):
+    return render(request, 'blog/post_detail.html')
