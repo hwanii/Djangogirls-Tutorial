@@ -36,29 +36,36 @@ def post_detail(request, pk):
 
 
 def post_add(request):
+    context = {}
     if request.method == 'POST':  # 요청의 종류가 무엇인지 확인 가능. post일때
         title = request.POST['title']  # post 받은 내용은 QueryDic이라는 딕셔너리 형태로 넘어 옴.
         content = request.POST['content']
-        post = Post.objects.create(
-            author=request.user,  # admin으로 로그인 한 상태에서만 사용 가능 -> 지금 사용자라는 의미
-            title=title,
-            content=content,
-        )
-        return redirect('post-detail', pk=post.pk)
-    else:  # get일때
-        return render(request, 'blog/post_add_edit.html')
+        if title and content:
+            post = Post.objects.create(
+                author=request.user,  # admin으로 로그인 한 상태에서만 사용 가능 -> 지금 사용자라는 의미
+                title=title,
+                content=content,
+            )
+            return redirect('post-detail', pk=post.pk)
+        context['form_error'] = '제목과 내용을 입력해주세요.'
+    return render(request, 'blog/post_add_edit.html', context)
+
 
 def post_edit(request, pk):
     post = Post.objects.get(pk=pk)
-    if request.method == 'POST':
-        post.title = request.POST['title']
-        post.content = request.POST['content']
-        post.save()
-        return redirect('post-detail', pk=post.pk)
     context = {
         'post': post,
     }
-    return render(request, 'blog/post_add_edit.html',context)
+    if request.method == 'POST':
+        title = request.POST['title']
+        content = request.POST['content']
+        if title and content:
+            post.title = title
+            post.content = content
+            post.save()
+            return redirect('post-detail', pk=post.pk)
+        context['form_error'] = '제목과 내용을 입력해주세요'
+    return render(request, 'blog/post_add_edit.html', context)
 
 
 def post_delete(request, pk):
@@ -68,4 +75,4 @@ def post_delete(request, pk):
         if request.user == post.author:
             post.delete()
             return redirect('post-list')
-        return redirect('post-detail',pk = post.pk)
+        return redirect('post-detail', pk=post.pk)

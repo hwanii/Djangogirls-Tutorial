@@ -8,6 +8,11 @@
     {% endif %}
 {% endblock %}
 {% block content %}
+{% if form_error %}
+<div>
+    <h3>{{ form_error }}</h3>
+</div>
+{% endif %}
 <form action="" method="POST"> {# 요청을 어디로 할 건지가 action #}
     {% csrf_token %} {# 입력 후 페이지 소스 보기 새로고침 계속 하면 value가 계속 달라짐 #}
     <div class="form-group">
