@@ -1,15 +1,21 @@
 {%  extends 'base.html' %}
-
+{% block title %}Post detail{% endblock %}
 {% block content %}
     <div class="container">
         <div class="post">
             <p class="post-date">published: {{ post.published_date }}</p>
             <h2 class="post-title"><a href="">{{ post.title }}</a></h2>
             <p class="post-content full">{{ post.content|linebreaksbr }}</p>
+            <div class="btn-container">
+                <a href="{% url 'post-edit' pk=post.pk %}" class="btn btn-primary">수정하기</a>
+                <form class="inline" action="{% url 'post-delete' pk=post.pk %}" method="POST">
+                    {# post-delete의 url에서 pk라는 인수를 필요로 하기 때문에 같이 넘겨줘야 함. #}
+                    {% csrf_token %} {# form의 method가 post인 경우엔 항상 해줘야함 #}
+                    <button type="submit" class="btn btn-danger">삭제하기</button>
+                </form>
+            </div>
+
+
         </div>
     </div>
-    <form action="{% url 'post-delete' pk=post.pk %}" method="POST"> {# post-delete의 url에서 pk라는 인수를 필요로 하기 때문에 같이 넘겨줘야 함. #}
-    {% csrf_token %} {# form의 method가 post인 경우엔 항상 해줘야함 #}
-        <button type="submit" class="btn btn-danger">삭제하기</button>
-    </form>
 {% endblock %}

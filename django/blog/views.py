@@ -48,11 +48,24 @@ def post_add(request):
     else:  # get일때
         return render(request, 'blog/post_add.html')
 
+def post_edit(request, pk):
+    post = Post.objects.get(pk=pk)
+    if request.method == 'POST':
+        post.title = request.POST['title']
+        post.content = request.POST['content']
+        post.save()
+        return redirect('post-detail', pk=post.pk)
+    context = {
+        'post': post,
+    }
+    return render(request, 'blog/post_edit.html',context)
+
 
 def post_delete(request, pk):
     if request.method == 'POST':
         post = Post.objects.get(pk=pk)
-        post.delete()
-        return redirect('post-list')
-    else:
-        return render(request, 'blog/post_list.html')
+        # 삭제할때 user와 post의 author가 같을때만 해당 post를 수행함
+        if request.user == post.author:
+            post.delete()
+            return redirect('post-list')
+        return redirect('post-detail',pk = post.pk)

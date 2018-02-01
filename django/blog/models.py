@@ -15,6 +15,10 @@ class Post(models.Model): # 데이터베이스의 형태를 결정해주는 클�
     published_date = models.DateTimeField(
         blank=True, null=True
     )
+    # 최신 것이 위로 오게 하는 구문. 조건을 여러개 줄 수 있음.
+    class Meta:
+        ordering = ['-created_date']
+
     def publish(self):
         self.published_date = timezone.now()
         self.save() # 데이터베이스와 연동될때는 데이터베이스에 저장을 해줘야함.

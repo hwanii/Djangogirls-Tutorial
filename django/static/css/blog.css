@@ -41,3 +41,6 @@ h2{
     max-height: initial;
     overflow: initial;
 }
+form.inline{
+    display: inline-block;
+}
