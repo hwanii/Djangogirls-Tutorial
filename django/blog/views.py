@@ -1,5 +1,5 @@
 from django.http import HttpResponse
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from .models import Post
 
 
@@ -27,11 +27,32 @@ def post_list(request):
     # 위 return 코드와 같음
     # return render(request, 'blog/post_list.html', context)
 
+
 def post_detail(request, pk):
     context = {
         'post': Post.objects.get(pk=pk),
     }
     return render(request, 'blog/post_detail.html', context)
 
+
 def post_add(request):
-    return render(request, 'blog/post_add.html')
+    if request.method == 'POST':  # 요청의 종류가 무엇인지 확인 가능. post일때
+        title = request.POST['title']  # post 받은 내용은 QueryDic이라는 딕셔너리 형태로 넘어 옴.
+        content = request.POST['content']
+        post = Post.objects.create(
+            author=request.user,  # admin으로 로그인 한 상태에서만 사용 가능 -> 지금 사용자라는 의미
+            title=title,
+            content=content,
+        )
+        return redirect('post-detail', pk=post.pk)
+    else:  # get일때
+        return render(request, 'blog/post_add.html')
+
+
+def post_delete(request, pk):
+    if request.method == 'POST':
+        post = Post.objects.get(pk=pk)
+        post.delete()
+        return redirect('post-list')
+    else:
+        return render(request, 'blog/post_list.html')
