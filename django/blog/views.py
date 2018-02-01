@@ -46,7 +46,7 @@ def post_add(request):
         )
         return redirect('post-detail', pk=post.pk)
     else:  # get일때
-        return render(request, 'blog/post_add.html')
+        return render(request, 'blog/post_add_edit.html')
 
 def post_edit(request, pk):
     post = Post.objects.get(pk=pk)
@@ -58,7 +58,7 @@ def post_edit(request, pk):
     context = {
         'post': post,
     }
-    return render(request, 'blog/post_edit.html',context)
+    return render(request, 'blog/post_add_edit.html',context)
 
 
 def post_delete(request, pk):

@@ -1,6 +1,12 @@
 {% extends 'base.html' %}
 
-{% block title %}Post edit (pk: {{ post.pk }}){% endblock %}
+{% block title %}
+    {% if post %}
+    Post edit (pk: {{ post.pk }})
+    {% else %}
+    Post add
+    {% endif %}
+{% endblock %}
 {% block content %}
 <form action="" method="POST"> {# 요청을 어디로 할 건지가 action #}
     {% csrf_token %} {# 입력 후 페이지 소스 보기 새로고침 계속 하면 value가 계속 달라짐 #}
@@ -10,8 +16,14 @@
     </div>
     <div class="form-group">
         <label for="content">내용</label>
-        <textarea name="content" class="form-control" id="content" cols="30" rows="10">{{ post.content }}</textarea>
+        <textarea name="content" class="form-control" id="content" cols="30" rows="10">{{ post.content }}</textarea> {# 템플릿 태그에서는 값이 따로 없더라도 에러가 안남 #}
     </div>
-    <button class="btn btn-primary" type="submit">수정</button>
+    <button class="btn btn-primary" type="submit">
+        {% if post %}
+        수정
+        {% else %}
+        작성
+        {% endif %}
+    </button>
 </form>
 {% endblock %}
